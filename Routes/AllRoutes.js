@@ -38,7 +38,7 @@ allRouter.post("/login",async(req,res)=>{
             bcrypt.compare(password,user.password,async(err,result)=>{
                 if(result){
                     let token = jwt.sign({userId: user._id,username:user.username},"manikant");
-                    res.status(200).send({msg:"Logged in Successfully!!",token});
+                    res.status(200).send({msg:"Logged in Successfully!!",token,userId:user._id});
                 }else{
                     res.status(400).send({msg:"Your email or password is wrong!!"})
                 }
@@ -55,8 +55,6 @@ allRouter.get("/blogs",auth,async(req,res)=>{
     const {title,category,sort,order} = req.query;
     try {
         let query = {};
-
-        query.userId = req.body.userId;
 
         if(title!==""){
             query.title = {$regex: new RegExp(title,"i")}
